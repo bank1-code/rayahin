@@ -3,14 +3,15 @@
  * أقسام، مواقع، موظفين، أنواع استبعاد
  */
 import { z } from "zod";
-import { eq } from "drizzle-orm";
-import { protectedProcedure, router } from "../_core/trpc";
+import { eq, sql } from "drizzle-orm";
+import { protectedProcedure, adminProcedure, router } from "../_core/trpc";
 import { getDb } from "../db";
 import {
   departments,
   locations,
   employees,
   exclusionTypes,
+  appSettings,
 } from "../../drizzle/schema";
 import { logAuditAction } from "../security";
 import { TRPCError } from "@trpc/server";
@@ -325,6 +326,78 @@ const exclusionTypesRouter = router({
 });
 
 // =============================================
+// هوية النظام - القراءة لكل مستخدم مسجل، والتعديل للمسؤول فقط
+// =============================================
+// إنشاء جدول الهوية تلقائياً عند أول استخدام لضمان عمل التحديث مباشرة بعد النشر
+async function ensureBrandingTable(db: any) {
+  await db.execute(sql`
+    CREATE TABLE IF NOT EXISTS app_settings (
+      id int NOT NULL,
+      systemName varchar(150) NOT NULL DEFAULT 'إدارة العهد والأصول',
+      systemSubtitle varchar(200) NOT NULL DEFAULT 'نظام سحابي متكامل',
+      logoUrl text,
+      updatedBy int,
+      createdAt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      updatedAt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      PRIMARY KEY (id),
+      CONSTRAINT app_settings_updatedBy_users_id_fk FOREIGN KEY (updatedBy) REFERENCES users(id)
+    )
+  `);
+}
+
+const brandingRouter = router({
+  get: protectedProcedure.query(async () => {
+    const db = await getDb();
+    if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "قاعدة البيانات غير متاحة" });
+    await ensureBrandingTable(db);
+    const [row] = await db.select().from(appSettings).where(eq(appSettings.id, 1)).limit(1);
+    return row ?? {
+      id: 1,
+      systemName: "إدارة العهد والأصول",
+      systemSubtitle: "نظام سحابي متكامل",
+      logoUrl: null,
+      updatedBy: null,
+      createdAt: null,
+      updatedAt: null,
+    };
+  }),
+
+  update: adminProcedure
+    .input(z.object({
+      systemName: z.string().trim().min(1).max(150),
+      systemSubtitle: z.string().trim().max(200),
+      logoUrl: z.string().trim().min(1).max(2048).nullable(),
+    }))
+    .mutation(async ({ input, ctx }) => {
+      const db = await getDb();
+      if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "قاعدة البيانات غير متاحة" });
+      await ensureBrandingTable(db);
+      const values = {
+        id: 1,
+        systemName: input.systemName,
+        systemSubtitle: input.systemSubtitle,
+        logoUrl: input.logoUrl,
+        updatedBy: ctx.user.id,
+      };
+      await db.insert(appSettings).values(values).onDuplicateKeyUpdate({
+        set: {
+          systemName: input.systemName,
+          systemSubtitle: input.systemSubtitle,
+          logoUrl: input.logoUrl,
+          updatedBy: ctx.user.id,
+        },
+      });
+      await logAuditAction({
+        tableName: "app_settings", recordId: 1, actionType: "UPDATE",
+        actionDescription: "تحديث هوية النظام", newData: input,
+        performedBy: ctx.user.id, performedByName: ctx.user.name || undefined,
+        ipAddress: ctx.req.ip || undefined, userAgent: ctx.req.headers["user-agent"] || undefined,
+      });
+      return { success: true, ...values };
+    }),
+});
+
+// =============================================
 // تجميع الإعدادات
 // =============================================
 export const settingsRouter = router({
@@ -332,4 +405,5 @@ export const settingsRouter = router({
   locations: locationsRouter,
   employees: employeesRouter,
   exclusionTypes: exclusionTypesRouter,
+  branding: brandingRouter,
 });

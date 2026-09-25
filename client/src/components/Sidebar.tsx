@@ -32,6 +32,7 @@ import {
   XCircle,
 } from "lucide-react";
 import { useLocation } from "wouter";
+import { trpc } from "@/lib/trpc";
 
 interface SidebarProps {
   collapsed: boolean;
@@ -85,6 +86,7 @@ export default function Sidebar({ collapsed, onToggle, onClose }: SidebarProps) 
   const [location, setLocation] = useLocation();
   const { user, logout } = useAuth();
   const { canInstall, isInstalled, isInstalling, install } = usePWAInstall();
+  const { data: branding } = trpc.settings.branding.get.useQuery();
 
   const handleLogout = async () => {
     await logout();
@@ -110,16 +112,20 @@ export default function Sidebar({ collapsed, onToggle, onClose }: SidebarProps) 
     >
       {/* Header: Logo + زر إغلاق على الهواتف */}
       <div className="flex items-center gap-3 px-4 h-16 border-b border-sidebar-border shrink-0">
-        <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center shrink-0">
-          <Building2 className="w-5 h-5 text-primary-foreground" />
+        <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center shrink-0 overflow-hidden">
+          {branding?.logoUrl ? (
+            <img src={branding.logoUrl} alt="شعار النظام" className="w-full h-full object-cover" />
+          ) : (
+            <Building2 className="w-5 h-5 text-primary-foreground" />
+          )}
         </div>
         {!collapsed && (
           <>
             <div className="overflow-hidden flex-1">
               <h1 className="text-sm font-bold text-sidebar-foreground truncate">
-                إدارة العهد والأصول
+                {branding?.systemName || "إدارة العهد والأصول"}
               </h1>
-              <p className="text-[10px] text-muted-foreground">نظام سحابي متكامل</p>
+              <p className="text-[10px] text-muted-foreground truncate">{branding?.systemSubtitle || "نظام سحابي متكامل"}</p>
             </div>
             {/* ✅ زر إغلاق واضح على الهواتف فقط */}
             {onClose && (

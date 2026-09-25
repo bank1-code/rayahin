@@ -335,3 +335,20 @@ export const inventorySessions = mysqlTable("inventory_sessions", {
 });
 export type InventorySession = typeof inventorySessions.$inferSelect;
 export type InsertInventorySession = typeof inventorySessions.$inferInsert;
+
+
+// =============================================
+// 18. إعدادات هوية النظام (app_settings)
+// =============================================
+export const appSettings = mysqlTable("app_settings", {
+  id: int("id").primaryKey(),
+  systemName: varchar("systemName", { length: 150 }).default("إدارة العهد والأصول").notNull(),
+  systemSubtitle: varchar("systemSubtitle", { length: 200 }).default("نظام سحابي متكامل").notNull(),
+  logoUrl: text("logoUrl"),
+  updatedBy: int("updatedBy").references(() => users.id),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type AppSettings = typeof appSettings.$inferSelect;
+export type InsertAppSettings = typeof appSettings.$inferInsert;

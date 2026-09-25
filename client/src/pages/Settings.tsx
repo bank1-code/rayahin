@@ -10,12 +10,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { trpc } from "@/lib/trpc";
 import {
   MapPin, Building2, Plus, Trash2, Edit, Save, X, Users,
-  AlertTriangle, Database, Download, Upload, Eye, Fingerprint, User, Loader2
+  AlertTriangle, Database, Download, Upload, Eye, Fingerprint, User, Loader2, ImageIcon
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { toast } from "sonner";
 
 export default function Settings() {
+  const { user } = useAuth();
+  const isAdmin = user?.role === "admin";
   return (
     <DashboardLayout title="الإعدادات" subtitle="إدارة المواقع والأقسام والموظفين وأنواع الاستبعاد">
       <Tabs defaultValue="locations" dir="rtl">
@@ -35,6 +38,11 @@ export default function Settings() {
           <TabsTrigger value="backup" className="rounded-lg text-xs px-4 py-2 gap-1.5 data-[state=active]:bg-white data-[state=active]:shadow-sm">
             <Database className="w-3.5 h-3.5" /> النسخ الاحتياطي
           </TabsTrigger>
+          {isAdmin && (
+            <TabsTrigger value="branding" className="rounded-lg text-xs px-4 py-2 gap-1.5 data-[state=active]:bg-white data-[state=active]:shadow-sm">
+              <ImageIcon className="w-3.5 h-3.5" /> هوية النظام
+            </TabsTrigger>
+          )}
         </TabsList>
 
         <TabsContent value="locations"><LocationsTab /></TabsContent>
@@ -42,6 +50,7 @@ export default function Settings() {
         <TabsContent value="employees"><EmployeesTab /></TabsContent>
         <TabsContent value="exclusion_types"><ExclusionTypesTab /></TabsContent>
         <TabsContent value="backup"><BackupTab /></TabsContent>
+        {isAdmin && <TabsContent value="branding"><BrandingTab /></TabsContent>}
       </Tabs>
     </DashboardLayout>
   );
@@ -653,6 +662,89 @@ function ExclusionTypesTab() {
           </div>
         </DialogContent>
       </Dialog>
+    </div>
+  );
+}
+
+// ===== تبويب هوية النظام - لمسؤول النظام فقط =====
+function BrandingTab() {
+  const utils = trpc.useUtils();
+  const { data: branding, isLoading } = trpc.settings.branding.get.useQuery();
+  const updateMut = trpc.settings.branding.update.useMutation({
+    onSuccess: async () => {
+      await utils.settings.branding.get.invalidate();
+      toast.success("تم تحديث هوية النظام بنجاح");
+    },
+    onError: (e) => toast.error(e.message),
+  });
+  const uploadMut = trpc.upload.image.useMutation();
+  const [systemName, setSystemName] = useState("");
+  const [systemSubtitle, setSystemSubtitle] = useState("");
+  const [logoUrl, setLogoUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!branding) return;
+    setSystemName(branding.systemName);
+    setSystemSubtitle(branding.systemSubtitle);
+    setLogoUrl(branding.logoUrl ?? null);
+  }, [branding]);
+
+  const handleLogo = (file?: File) => {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) { toast.error("يرجى اختيار ملف صورة"); return; }
+    if (file.size > 10 * 1024 * 1024) { toast.error("حجم الصورة يتجاوز 10 ميجابايت"); return; }
+    const reader = new FileReader();
+    reader.onload = async () => {
+      try {
+        const result = await uploadMut.mutateAsync({ base64: String(reader.result), category: "branding" });
+        setLogoUrl(result.url);
+        toast.success("تم رفع الشعار، اضغط حفظ لتطبيقه");
+      } catch (e: any) { toast.error(e?.message || "فشل رفع الشعار"); }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const save = () => {
+    if (!systemName.trim()) { toast.error("اسم النظام مطلوب"); return; }
+    updateMut.mutate({ systemName: systemName.trim(), systemSubtitle: systemSubtitle.trim(), logoUrl });
+  };
+
+  if (isLoading) return <div className="py-10 text-center text-sm text-muted-foreground">جاري تحميل إعدادات الهوية...</div>;
+
+  return (
+    <div className="max-w-2xl space-y-5">
+      <div>
+        <h3 className="text-base font-bold">هوية النظام</h3>
+        <p className="text-xs text-muted-foreground mt-1">تغيير الشعار والاسم الظاهر أعلى القائمة الجانبية. هذه الإعدادات متاحة لمسؤول النظام فقط.</p>
+      </div>
+      <div className="border border-border rounded-xl p-5 space-y-5 bg-card">
+        <div className="flex items-center gap-4">
+          <div className="w-20 h-20 rounded-xl bg-primary/10 border border-border flex items-center justify-center overflow-hidden shrink-0">
+            {logoUrl ? <img src={logoUrl} alt="معاينة الشعار" className="w-full h-full object-cover" /> : <Building2 className="w-9 h-9 text-primary" />}
+          </div>
+          <div className="space-y-2">
+            <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-primary text-primary-foreground px-4 py-2 text-xs font-bold hover:opacity-90">
+              {uploadMut.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+              رفع صورة الشعار
+              <input type="file" accept="image/*" className="hidden" disabled={uploadMut.isPending} onChange={(e) => handleLogo(e.target.files?.[0])} />
+            </label>
+            {logoUrl && <button type="button" onClick={() => setLogoUrl(null)} className="block text-xs text-destructive hover:underline">إزالة الصورة والعودة للأيقونة الافتراضية</button>}
+            <p className="text-[11px] text-muted-foreground">تُحوّل الصورة تلقائياً إلى WebP وتحفظ في التخزين السحابي.</p>
+          </div>
+        </div>
+        <div className="space-y-1.5">
+          <label className="text-xs font-bold">اسم النظام</label>
+          <input value={systemName} maxLength={150} onChange={(e) => setSystemName(e.target.value)} className="w-full h-10 px-3 rounded-lg bg-muted/30 border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="إدارة العهد والأصول" />
+        </div>
+        <div className="space-y-1.5">
+          <label className="text-xs font-bold">الوصف المختصر</label>
+          <input value={systemSubtitle} maxLength={200} onChange={(e) => setSystemSubtitle(e.target.value)} className="w-full h-10 px-3 rounded-lg bg-muted/30 border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="نظام سحابي متكامل" />
+        </div>
+        <Button onClick={save} disabled={updateMut.isPending || uploadMut.isPending} className="gap-2">
+          {updateMut.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+          حفظ الهوية
+        </Button>
+      </div>
     </div>
   );
 }

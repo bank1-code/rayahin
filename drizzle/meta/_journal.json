@@ -36,6 +36,13 @@
       "when": 1776581778729,
       "tag": "0004_magenta_stephen_strange",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1790363324315,
+      "tag": "0005_system_branding",
+      "breakpoints": true
     }
   ]
 }

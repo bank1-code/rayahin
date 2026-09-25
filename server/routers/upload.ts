@@ -45,11 +45,14 @@ export const uploadRouter = router({
     .input(
       z.object({
         base64: z.string().min(1),
-        category: z.enum(["asset", "custody", "invoice", "exclusion", "document"]),
+        category: z.enum(["asset", "custody", "invoice", "exclusion", "document", "branding"]),
         entityId: z.number().optional(),
       })
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
+      if (input.category === "branding" && ctx.user.role !== "admin") {
+        throw new TRPCError({ code: "FORBIDDEN", message: "هذه الصلاحية متاحة لمسؤول النظام فقط" });
+      }
       // التحقق من حجم الصورة
       const sizeInBytes = (input.base64.length * 3) / 4;
       if (sizeInBytes > MAX_IMAGE_SIZE) {
