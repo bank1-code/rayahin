@@ -4,17 +4,25 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 import type { TrpcContext } from "./context";
 import { APPROVER_ROLES, OPERATOR_ROLES, type Role } from "../../shared/roles";
+import { getUserErrorMessage, isUserErrorMessage } from "../../shared/errorMessages";
 
 const t = initTRPC.context<TrpcContext>().create({
   transformer: superjson,
-  errorFormatter({ shape, error }) {
-    if (!(error.cause instanceof ZodError)) return shape;
-    const messages = [...new Set(error.cause.issues
-      .map(issue => issue.message)
-      .filter(message => /[\u0600-\u06ff]/.test(message)))];
-    return { ...shape, message: messages.length
-      ? messages.slice(0, 3).join("؛ ")
-      : "بيانات الإدخال غير صالحة. راجع الحقول المطلوبة والقيم ثم حاول مجددًا." };
+  errorFormatter({ shape, error, path }) {
+    const messages = error.cause instanceof ZodError
+      ? [...new Set(error.cause.issues.map(issue => issue.message).filter(isUserErrorMessage))]
+      : [];
+    if (!(error.cause instanceof ZodError)
+      && (error.code === "INTERNAL_SERVER_ERROR" || !isUserErrorMessage(error.message))) {
+      console.error("[API Error]", path, error);
+    }
+    return {
+      ...shape,
+      message: error.cause instanceof ZodError
+        ? messages.slice(0, 3).join("؛ ") || getUserErrorMessage({ code: "BAD_REQUEST" })
+        : getUserErrorMessage(error),
+      data: { ...shape.data, stack: undefined },
+    };
   },
 });
 

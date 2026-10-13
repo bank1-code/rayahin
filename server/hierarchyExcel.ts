@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { getUserErrorMessage, isUserErrorMessage } from "../shared/errorMessages";
 import { readExcelRows } from "./excelInput";
 import { eq } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
@@ -342,12 +343,13 @@ export const hierarchyExcelProcedures = {
           try {
             validated = validateRow(row.data, input.type, state);
           } catch (error: any) {
+            if (!isUserErrorMessage(error.message)) console.error("[Hierarchy Import Error]", row.rowNumber, error);
             rejected++;
             results.push({
               rowNumber: row.rowNumber,
               name: row.data.name,
               status: "error",
-              message: error.message,
+              message: getUserErrorMessage(error, "تعذر معالجة هذا الصف. راجع البيانات ثم أعد المحاولة."),
             });
             continue;
           }

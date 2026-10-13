@@ -1,3 +1,4 @@
+import { getUserErrorMessage } from "@shared/errorMessages";
 import FieldHelp from "@/components/FieldHelp";
 /*
  * Design: Calm Luxury - الإعدادات
@@ -125,15 +126,15 @@ function LocationsTab() {
   const { data: readinessDepartments = [], isLoading: departmentsLoading } = trpc.settings.departments.list.useQuery();
   const createMut = trpc.settings.locations.create.useMutation({
     onSuccess: async () => { await utils.settings.locations.list.invalidate(); toast.success("تم إضافة الموقع وتوليد كوده الهرمي"); },
-    onError: (e) => toast.error(e.message),
+    onError: (e) => toast.error(getUserErrorMessage(e)),
   });
   const updateMut = trpc.settings.locations.update.useMutation({
     onSuccess: async () => { await utils.settings.locations.list.invalidate(); toast.success("تم تحديث الموقع"); },
-    onError: (e) => toast.error(e.message),
+    onError: (e) => toast.error(getUserErrorMessage(e)),
   });
   const deleteMut = trpc.settings.locations.delete.useMutation({
     onSuccess: async () => { await utils.settings.locations.list.invalidate(); toast.success("تم حذف الموقع"); },
-    onError: (e) => toast.error(e.message),
+    onError: (e) => toast.error(getUserErrorMessage(e)),
   });
 
   const empty = { name: "", assetPrefix: "", custodyPrefix: "" };
@@ -220,9 +221,9 @@ function BranchesTab() {
   const utils = trpc.useUtils();
   const { data: branches = [], isLoading } = trpc.settings.branches.list.useQuery();
   const { data: locations = [] } = trpc.settings.locations.list.useQuery();
-  const createMut = trpc.settings.branches.create.useMutation({ onSuccess:async()=>{await utils.settings.branches.list.invalidate();toast.success("تم إضافة الفرع وتوليد كوده")}, onError:e=>toast.error(e.message) });
-  const updateMut = trpc.settings.branches.update.useMutation({ onSuccess:async()=>{await Promise.all([utils.settings.branches.list.invalidate(),utils.settings.departments.list.invalidate(),utils.settings.employees.list.invalidate()]);toast.success("تم تعديل الفرع وتحديث المسار الهرمي")}, onError:e=>toast.error(e.message) });
-  const deleteMut = trpc.settings.branches.delete.useMutation({ onSuccess:async()=>{await utils.settings.branches.list.invalidate();toast.success("تم حذف الفرع")}, onError:e=>toast.error(e.message) });
+  const createMut = trpc.settings.branches.create.useMutation({ onSuccess:async()=>{await utils.settings.branches.list.invalidate();toast.success("تم إضافة الفرع وتوليد كوده")}, onError:e=>toast.error(getUserErrorMessage(e)) });
+  const updateMut = trpc.settings.branches.update.useMutation({ onSuccess:async()=>{await Promise.all([utils.settings.branches.list.invalidate(),utils.settings.departments.list.invalidate(),utils.settings.employees.list.invalidate()]);toast.success("تم تعديل الفرع وتحديث المسار الهرمي")}, onError:e=>toast.error(getUserErrorMessage(e)) });
+  const deleteMut = trpc.settings.branches.delete.useMutation({ onSuccess:async()=>{await utils.settings.branches.list.invalidate();toast.success("تم حذف الفرع")}, onError:e=>toast.error(getUserErrorMessage(e)) });
   const [showAdd,setShowAdd]=useState(false); const [editId,setEditId]=useState<number|null>(null); const [name,setName]=useState(""); const [locationId,setLocationId]=useState("");
   const [page,setPage]=useState(1); const totalPages=Math.max(1,Math.ceil(branches.length/SETTINGS_PAGE_SIZE)); const pagedBranches=branches.slice((page-1)*SETTINGS_PAGE_SIZE,page*SETTINGS_PAGE_SIZE);
   useEffect(()=>setPage(current=>Math.min(current,totalPages)),[totalPages]);
@@ -238,9 +239,9 @@ function BranchesTab() {
 // ===== تبويب الأقسام =====
 function DepartmentsTab() {
   const utils=trpc.useUtils(); const {data:depts=[],isLoading}=trpc.settings.departments.list.useQuery(); const {data:branches=[]}=trpc.settings.branches.list.useQuery();
-  const createMut=trpc.settings.departments.create.useMutation({onSuccess:async()=>{await utils.settings.departments.list.invalidate();toast.success("تم إضافة القسم وتوليد كوده")},onError:e=>toast.error(e.message)});
-  const updateMut=trpc.settings.departments.update.useMutation({onSuccess:async()=>{await Promise.all([utils.settings.departments.list.invalidate(),utils.settings.employees.list.invalidate()]);toast.success("تم تعديل القسم وتحديث المسار الهرمي")},onError:e=>toast.error(e.message)});
-  const deleteMut=trpc.settings.departments.delete.useMutation({onSuccess:()=>utils.settings.departments.list.invalidate(),onError:e=>toast.error(e.message)});
+  const createMut=trpc.settings.departments.create.useMutation({onSuccess:async()=>{await utils.settings.departments.list.invalidate();toast.success("تم إضافة القسم وتوليد كوده")},onError:e=>toast.error(getUserErrorMessage(e))});
+  const updateMut=trpc.settings.departments.update.useMutation({onSuccess:async()=>{await Promise.all([utils.settings.departments.list.invalidate(),utils.settings.employees.list.invalidate()]);toast.success("تم تعديل القسم وتحديث المسار الهرمي")},onError:e=>toast.error(getUserErrorMessage(e))});
+  const deleteMut=trpc.settings.departments.delete.useMutation({onSuccess:()=>utils.settings.departments.list.invalidate(),onError:e=>toast.error(getUserErrorMessage(e))});
   const [showAdd,setShowAdd]=useState(false),[editId,setEditId]=useState<number|null>(null),[name,setName]=useState(""),[branchId,setBranchId]=useState("");
   const [page,setPage]=useState(1); const totalPages=Math.max(1,Math.ceil(depts.length/SETTINGS_PAGE_SIZE)); const pagedDepts=depts.slice((page-1)*SETTINGS_PAGE_SIZE,page*SETTINGS_PAGE_SIZE);
   useEffect(()=>setPage(current=>Math.min(current,totalPages)),[totalPages]);
@@ -258,9 +259,9 @@ function EmployeesTab() {
   const utils = trpc.useUtils();
   const { data: employees = [], isLoading } = trpc.settings.employees.list.useQuery();
   const { data: departments = [] } = trpc.settings.departments.list.useQuery();
-  const createMut = trpc.settings.employees.create.useMutation({ onSuccess: async () => { await utils.settings.employees.list.invalidate(); toast.success("تم إضافة الموظف وتوليد كوده الهرمي"); }, onError: (e) => toast.error(e.message) });
-  const updateMut = trpc.settings.employees.update.useMutation({ onSuccess: async () => { await utils.settings.employees.list.invalidate(); toast.success("تم تعديل بيانات الموظف"); }, onError: (e) => toast.error(e.message) });
-  const deleteMut = trpc.settings.employees.delete.useMutation({ onSuccess: async () => { await utils.settings.employees.list.invalidate(); toast.success("تم حذف الموظف"); }, onError: (e) => toast.error(e.message) });
+  const createMut = trpc.settings.employees.create.useMutation({ onSuccess: async () => { await utils.settings.employees.list.invalidate(); toast.success("تم إضافة الموظف وتوليد كوده الهرمي"); }, onError: (e) => toast.error(getUserErrorMessage(e)) });
+  const updateMut = trpc.settings.employees.update.useMutation({ onSuccess: async () => { await utils.settings.employees.list.invalidate(); toast.success("تم تعديل بيانات الموظف"); }, onError: (e) => toast.error(getUserErrorMessage(e)) });
+  const deleteMut = trpc.settings.employees.delete.useMutation({ onSuccess: async () => { await utils.settings.employees.list.invalidate(); toast.success("تم حذف الموظف"); }, onError: (e) => toast.error(getUserErrorMessage(e)) });
   const empty = { fullName: "", departmentId: "", fingerprintId: "", nationalId: "", phone: "" };
   const [showAdd, setShowAdd] = useState(false); const [editId, setEditId] = useState<number | null>(null); const [newData, setNewData] = useState(empty); const [editData, setEditData] = useState(empty); const [searchQuery, setSearchQuery] = useState(""); const [page,setPage]=useState(1);
   const filtered = employees.filter((e:any) => !searchQuery.trim() || `${e.code || ""} ${e.fullName} ${e.departmentName || ""} ${e.branchName || ""} ${e.locationName || ""} ${e.fingerprintId || ""}`.toLowerCase().includes(searchQuery.toLowerCase()));
@@ -285,11 +286,11 @@ function ExclusionTypesTab() {
   const { data: types = [], isLoading } = trpc.settings.exclusionTypes.list.useQuery();
   const createMut = trpc.settings.exclusionTypes.create.useMutation({
     onSuccess: () => { utils.settings.exclusionTypes.list.invalidate(); toast.success("تم إضافة نوع الاستبعاد بنجاح"); },
-    onError: (e) => toast.error(e.message),
+    onError: (e) => toast.error(getUserErrorMessage(e)),
   });
   const deleteMut = trpc.settings.exclusionTypes.delete.useMutation({
     onSuccess: () => { utils.settings.exclusionTypes.list.invalidate(); toast.success("تم حذف نوع الاستبعاد بنجاح"); },
-    onError: (e) => toast.error(e.message),
+    onError: (e) => toast.error(getUserErrorMessage(e)),
   });
 
   const [showAdd, setShowAdd] = useState(false);
@@ -382,7 +383,7 @@ function BrandingTab() {
       await utils.settings.branding.get.invalidate();
       toast.success("تم تحديث هوية النظام بنجاح");
     },
-    onError: (e) => toast.error(e.message),
+    onError: (e) => toast.error(getUserErrorMessage(e)),
   });
   const uploadMut = trpc.upload.image.useMutation();
   const [systemName, setSystemName] = useState("");
@@ -406,7 +407,7 @@ function BrandingTab() {
         const result = await uploadMut.mutateAsync({ base64: String(reader.result), category: "branding" });
         setLogoUrl(result.url);
         toast.success("تم رفع الشعار، اضغط حفظ لتطبيقه");
-      } catch (e: any) { toast.error(e?.message || "فشل رفع الشعار"); }
+      } catch (e: any) { toast.error(getUserErrorMessage(e, "فشل رفع الشعار")); }
     };
     reader.readAsDataURL(file);
   };
@@ -466,7 +467,7 @@ function BackupTab() {
       utils.backup.list.invalidate();
       toast.success(`تم إنشاء النسخة الاحتياطية بنجاح (${data.totalRecords} سجل)`);
     },
-    onError: (e) => toast.error(e.message),
+    onError: (e) => toast.error(getUserErrorMessage(e)),
   });
 
   const restoreMut = trpc.backup.restore.useMutation({
@@ -476,7 +477,7 @@ function BackupTab() {
         toast.warning(`${data.errors.length} أخطاء أثناء الاستعادة`);
       }
     },
-    onError: (e) => toast.error(e.message),
+    onError: (e) => toast.error(getUserErrorMessage(e)),
   });
 
   const handleRestore = () => {

@@ -1,3 +1,4 @@
+import { getUserErrorMessage } from "@shared/errorMessages";
 import { escapeHtml } from "@shared/html";
 import { canApprove as hasApprovalRole, canOperate as hasOperatorRole } from "@shared/roles";
 import { remainingQuantity } from "@shared/inventoryQuantity";
@@ -170,11 +171,11 @@ export default function Custody() {
   const handleApprove = (record: any) => setApprovalCandidate(record);
   const confirmApproval = async () => {
     if (!approvalCandidate || approveDraft.isPending) return;
-    try { const result = await approveDraft.mutateAsync({ id: approvalCandidate.id, expectedVersion: approvalCandidate.draftVersion }); setApprovalCandidate(null); await refreshDrafts(); toast.success(`تم الاعتماد بالرقم: ${result.code}`); } catch (error: any) { toast.error(error.message); }
+    try { const result = await approveDraft.mutateAsync({ id: approvalCandidate.id, expectedVersion: approvalCandidate.draftVersion }); setApprovalCandidate(null); await refreshDrafts(); toast.success(`تم الاعتماد بالرقم: ${result.code}`); } catch (error: any) { toast.error(getUserErrorMessage(error)); }
   };
   const handleRequestChanges = async (record: any) => {
     const note = prompt("اكتب الملاحظات المطلوبة لتصحيح المسودة:"); if (!note?.trim()) return;
-    try { await requestChanges.mutateAsync({ id: record.id, expectedVersion: record.draftVersion, note }); await refreshDrafts(); toast.success("تم حفظ ملاحظات المراجعة"); } catch (error: any) { toast.error(error.message); }
+    try { await requestChanges.mutateAsync({ id: record.id, expectedVersion: record.draftVersion, note }); await refreshDrafts(); toast.success("تم حفظ ملاحظات المراجعة"); } catch (error: any) { toast.error(getUserErrorMessage(error)); }
   };
   const uploadImage = trpc.upload.image.useMutation();
 
@@ -354,7 +355,7 @@ export default function Custody() {
       );
       resetForm();
     } catch (error: any) {
-      toast.error(error.message || "حدث خطأ أثناء الحفظ");
+      toast.error(getUserErrorMessage(error, "حدث خطأ أثناء الحفظ"));
     } finally {
       setIsUploading(false);
     }
@@ -404,7 +405,7 @@ export default function Custody() {
       toast.success("تم تعديل المسودة بنجاح");
       resetForm();
     } catch (error: any) {
-      toast.error(error.message || "حدث خطأ أثناء التعديل");
+      toast.error(getUserErrorMessage(error, "حدث خطأ أثناء التعديل"));
     } finally {
       setIsUploading(false);
     }
@@ -416,7 +417,7 @@ export default function Custody() {
       await cancelCustodyDraft.mutateAsync({ id: item.id, expectedVersion: item.draftVersion });
       toast.success("تم إلغاء المسودة");
     } catch (error: any) {
-      toast.error(error.message || "حدث خطأ أثناء الإلغاء");
+      toast.error(getUserErrorMessage(error, "حدث خطأ أثناء الإلغاء"));
     }
   };
 

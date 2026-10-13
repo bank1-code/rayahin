@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { getUserErrorMessage } from "../../shared/errorMessages";
 import { ownerProcedure, router } from "../_core/trpc";
 import { getDb } from "../db";
 import { auditLog } from "../../drizzle/schema";
@@ -496,8 +497,9 @@ export const backupRouter = router({
         });
       } catch (error: any) {
         // أي خطأ داخل Transaction يؤدي إلى Rollback تلقائياً.
+        console.error("[Backup Restore Error]", error);
         throw new Error(
-          `فشل في استعادة النسخة الاحتياطية وتم التراجع عن جميع التغييرات: ${error.message}`
+          `فشل في استعادة النسخة الاحتياطية وتم التراجع عن جميع التغييرات: ${getUserErrorMessage(error)}`
         );
       }
 

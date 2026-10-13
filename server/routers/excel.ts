@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { getUserErrorMessage, isUserErrorMessage } from "../../shared/errorMessages";
 import { operatorProcedure, router } from "../_core/trpc";
 import { getDb } from "../db";
 import {
@@ -251,7 +252,8 @@ export const excelRouter = router({
             });
           imported++;
         } catch (err: any) {
-          errors.push(`صف ${i + 2}: ${err.message}`);
+          if (!isUserErrorMessage(err.message)) console.error("[Excel Import Error]", i + 2, err);
+          errors.push(`صف ${i + 2}: ${getUserErrorMessage(err, "تعذر معالجة هذا الصف. راجع البيانات ثم أعد المحاولة.")}`);
           skipped++;
         }
       }
@@ -387,7 +389,8 @@ export const excelRouter = router({
             });
           imported++;
         } catch (err: any) {
-          errors.push(`صف ${i + 2}: ${err.message}`);
+          if (!isUserErrorMessage(err.message)) console.error("[Excel Import Error]", i + 2, err);
+          errors.push(`صف ${i + 2}: ${getUserErrorMessage(err, "تعذر معالجة هذا الصف. راجع البيانات ثم أعد المحاولة.")}`);
           skipped++;
         }
       }
@@ -504,7 +507,8 @@ export const excelRouter = router({
           });
           imported++;
         } catch (err: any) {
-          errors.push(`صف ${i + 2}: ${err.message}`);
+          if (!isUserErrorMessage(err.message)) console.error("[Excel Import Error]", i + 2, err);
+          errors.push(`صف ${i + 2}: ${getUserErrorMessage(err, "تعذر معالجة هذا الصف. راجع البيانات ثم أعد المحاولة.")}`);
           skipped++;
         }
       }

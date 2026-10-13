@@ -1,3 +1,4 @@
+import { getUserErrorMessage } from "@shared/errorMessages";
 import { recoverCountEdits } from "@/lib/inventoryRecovery";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { trpc } from "@/lib/trpc";
@@ -218,7 +219,7 @@ export default function InventoryCountWorkspace({
         (error: any) => {
           setSaveState("تعذر الحفظ");
           setSaveError(
-            error.message || "تعذر الاتصال؛ مدخلاتك باقية هنا، أعد المحاولة"
+            getUserErrorMessage(error, "تعذر الاتصال؛ مدخلاتك باقية هنا، أعد المحاولة")
           );
         }
       );
@@ -278,7 +279,7 @@ export default function InventoryCountWorkspace({
       install(next as Session);
       setTab("count");
     } catch (error: any) {
-      toast.error(error.message);
+      toast.error(getUserErrorMessage(error));
     }
   };
   const edit = (key: string, change: Partial<CountItem>) => {
@@ -384,7 +385,7 @@ export default function InventoryCountWorkspace({
         "حُفظ نطاق الجرد كمسودة؛ الكميات المتوقعة ثابتة من هذه اللحظة"
       );
     } catch (error: any) {
-      toast.error(error.message);
+      toast.error(getUserErrorMessage(error));
       void preview.refetch();
     }
   };
@@ -426,7 +427,7 @@ export default function InventoryCountWorkspace({
               : "أُلغيت المسودة مع حفظ تاريخها"
       );
     } catch (error: any) {
-      toast.error(error.message);
+      toast.error(getUserErrorMessage(error));
     }
   };
   const exportSession = (value: any, onlyDifferences = false) => {
@@ -672,7 +673,7 @@ export default function InventoryCountWorkspace({
               <>
                 {preview.isFetching && <p>جاري تجهيز المعاينة…</p>}
                 {preview.error && (
-                  <p className="text-destructive">{preview.error.message}</p>
+                  <p className="text-destructive">{getUserErrorMessage(preview.error)}</p>
                 )}
                 {preview.data && (
                   <>
@@ -927,7 +928,7 @@ export default function InventoryCountWorkspace({
                               .fetch({ id: session.id })
                               .then(next => install(next as Session))
                               .catch((error: any) =>
-                                toast.error(error.message)
+                                toast.error(getUserErrorMessage(error))
                               );
                           }
                         }}
@@ -956,7 +957,7 @@ export default function InventoryCountWorkspace({
             )}
             {changes.error && (
               <p className="text-destructive">
-                تعذر فحص الحركات: {changes.error.message}
+                تعذر فحص الحركات: {getUserErrorMessage(changes.error)}
               </p>
             )}
             <section className="rounded-2xl border bg-background p-4 shadow-sm">
@@ -1218,7 +1219,7 @@ export default function InventoryCountWorkspace({
           }}
         />
         {list.isLoading && <p>جاري التحميل…</p>}
-        {list.error && <p className="text-destructive">{list.error.message}</p>}
+        {list.error && <p className="text-destructive">{getUserErrorMessage(list.error)}</p>}
         <div className="overflow-x-auto">
           <table className="w-full text-sm min-w-[700px]">
             <thead>

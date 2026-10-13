@@ -1,3 +1,4 @@
+import { getUserErrorMessage } from "@shared/errorMessages";
 import { remainingQuantity } from "@shared/inventoryQuantity";
 /*
  * Design: Calm Luxury - استبعادات الأصول والعهد
@@ -256,7 +257,7 @@ function ExclusionWizard({ category }: { category: "asset" | "custody" }) {
         setImages(prev => prev.map(img => img.id === imgId
           ? { ...img, uploading: false, uploadError: true }
           : img));
-        toast.error(error?.message || "فشل رفع الصورة");
+        toast.error(getUserErrorMessage(error, "فشل رفع الصورة"));
       }
     };
     input.click();
@@ -276,7 +277,7 @@ function ExclusionWizard({ category }: { category: "asset" | "custody" }) {
       setDraftId(result.id); setDraftSaved(true); setIsEditing(false);
       utils.operations.exclusions.drafts.invalidate();
       toast.success("تم حفظ المسودة في النظام ويمكن استكمالها لاحقًا");
-    } catch (error: any) { toast.error(error.message || "فشل حفظ المسودة"); }
+    } catch (error: any) { toast.error(getUserErrorMessage(error, "فشل حفظ المسودة")); }
   };
   const executeExclusion = async () => {
     if (busy || executed || executionPending.current || !validateExclusionData() || !validateSignatures() || !validateImageUploads()) return;
@@ -286,7 +287,7 @@ function ExclusionWizard({ category }: { category: "asset" | "custody" }) {
       setExecutionRecord(result.record); setExecutionCode(result.record.exclusionCode);
       setExecuted(true); setDraftSaved(false); setDraftId(undefined);
       toast.success("تم تنفيذ الاستبعاد: " + result.record.exclusionCode + " — المتبقي: " + result.record.quantityRemaining);
-    } catch (error: any) { toast.error(error.message || "حدث خطأ أثناء تنفيذ الاستبعاد"); }
+    } catch (error: any) { toast.error(getUserErrorMessage(error, "حدث خطأ أثناء تنفيذ الاستبعاد")); }
     finally { executionPending.current = false; setExecutionConfirmation(false); }
   };
   const restoreDraft = (draft: any) => {
@@ -308,7 +309,7 @@ function ExclusionWizard({ category }: { category: "asset" | "custody" }) {
     if (busy) return;
     if (draftId) {
       try { await deleteDraftMutation.mutateAsync({ id: draftId }); }
-      catch (error: any) { toast.error(error.message); return; }
+      catch (error: any) { toast.error(getUserErrorMessage(error)); return; }
       utils.operations.exclusions.drafts.invalidate();
     }
     setDraftId(undefined);
@@ -361,7 +362,7 @@ function ExclusionWizard({ category }: { category: "asset" | "custody" }) {
               try { await deleteDraftMutation.mutateAsync({ id: draft.id });
                 utils.operations.exclusions.drafts.invalidate();
                 if (draftId === draft.id) { setDraftId(undefined); setDraftSaved(false); }
-              } catch (error: any) { toast.error(error.message); }
+              } catch (error: any) { toast.error(getUserErrorMessage(error)); }
             }}>إلغاء المسودة</Button>
           </div>
         ))}

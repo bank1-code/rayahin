@@ -1,3 +1,4 @@
+import { getUserErrorMessage } from "@shared/errorMessages";
 /**
  * Archive.tsx - الأرشيف
  * مربوط بالـ API الحقيقي عبر tRPC
@@ -34,8 +35,8 @@ function ArchiveEntityTab({ entityType, entityLabel }: { entityType: string; ent
 
   const filteredRecords = records || [];
 
-  const handlePrint = async () => { if(!selectedId){toast.warning("اختر وثيقة أولاً");return;}try{await openArchiveReportAsync(()=>utils.records.archive.getById.fetch({id:selectedId}));}catch(e:any){toast.error(e.message||"تعذر عرض الوثيقة");} };
-  const handleDownload=async()=>{if(!selectedId){toast.warning("اختر وثيقة أولاً");return;}try{downloadArchiveReport(await utils.records.archive.getById.fetch({id:selectedId}));}catch(e:any){toast.error(e.message||"تعذر تحميل الوثيقة");}};
+  const handlePrint = async () => { if(!selectedId){toast.warning("اختر وثيقة أولاً");return;}try{await openArchiveReportAsync(()=>utils.records.archive.getById.fetch({id:selectedId}));}catch(e:any){toast.error(getUserErrorMessage(e, "تعذر عرض الوثيقة"));} };
+  const handleDownload=async()=>{if(!selectedId){toast.warning("اختر وثيقة أولاً");return;}try{downloadArchiveReport(await utils.records.archive.getById.fetch({id:selectedId}));}catch(e:any){toast.error(getUserErrorMessage(e, "تعذر تحميل الوثيقة"));}};
 
   return (
     <div className="space-y-4">
@@ -62,7 +63,7 @@ function ArchiveEntityTab({ entityType, entityLabel }: { entityType: string; ent
         </div>
       </div>
 
-      {error&&<p role="alert" className="text-sm text-destructive">تعذر تحميل الأرشيف: {error.message}</p>}
+      {error&&<p role="alert" className="text-sm text-destructive">تعذر تحميل الأرشيف: {getUserErrorMessage(error)}</p>}
       {/* الجدول */}
       <div className="bg-card rounded-xl border border-border shadow-[0_1px_3px_rgba(0,0,0,0.04)] overflow-hidden">
         <div className="overflow-x-auto">
@@ -150,8 +151,8 @@ function ArchiveDocsTab({ entityType }: { entityType: "documentation_asset" | "d
   const {data:count}=trpc.records.archive.count.useQuery({entityType});
   const utils = trpc.useUtils();
 
-  const handleDocPrint = async(doc:any)=>{try{await openArchiveReportAsync(()=>utils.records.archive.getById.fetch({id:doc.id}));}catch(e:any){toast.error(e.message||"تعذر عرض الوثيقة");}};
-  const handleDocDownload = async(doc:any)=>{try{downloadArchiveDocument(await utils.records.archive.getById.fetch({id:doc.id}));}catch(e:any){toast.error(e.message||"تعذر تحميل الوثيقة");}};
+  const handleDocPrint = async(doc:any)=>{try{await openArchiveReportAsync(()=>utils.records.archive.getById.fetch({id:doc.id}));}catch(e:any){toast.error(getUserErrorMessage(e, "تعذر عرض الوثيقة"));}};
+  const handleDocDownload = async(doc:any)=>{try{downloadArchiveDocument(await utils.records.archive.getById.fetch({id:doc.id}));}catch(e:any){toast.error(getUserErrorMessage(e, "تعذر تحميل الوثيقة"));}};
 
   const handleFileSelect = () => {
     const input = document.createElement("input");
@@ -193,7 +194,7 @@ function ArchiveDocsTab({ entityType }: { entityType: "documentation_asset" | "d
       setDocTitle("");
       setSelectedFile(null);
     } catch (err: any) {
-      toast.error(err?.message || "حدث خطأ أثناء حفظ المستند");
+      toast.error(getUserErrorMessage(err, "حدث خطأ أثناء حفظ المستند"));
     } finally {
       setIsUploading(false);
     }
@@ -238,7 +239,7 @@ function ArchiveDocsTab({ entityType }: { entityType: "documentation_asset" | "d
         </div>
       </div>
 
-      {error&&<p role="alert" className="text-sm text-destructive">تعذر تحميل المستندات: {error.message}</p>}
+      {error&&<p role="alert" className="text-sm text-destructive">تعذر تحميل المستندات: {getUserErrorMessage(error)}</p>}
       {/* قائمة المستندات المحفوظة */}
       <div className="bg-card rounded-xl border border-border shadow-[0_1px_3px_rgba(0,0,0,0.04)] overflow-hidden">
         <div className="p-3 border-b border-border bg-muted/20">

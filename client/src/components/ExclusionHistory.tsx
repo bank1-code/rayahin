@@ -1,3 +1,4 @@
+import { getUserErrorMessage } from "@shared/errorMessages";
 import { useRef, useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
@@ -23,10 +24,10 @@ export default function ExclusionHistory({ id }: { id: number }) {
       await utils.operations.exclusions.getById.invalidate({ id });
       await utils.records.audit.getTimeline.invalidate(); await utils.records.archive.list.invalidate();
       toast.success("أضيف المرفق بسجل مستقل؛ المرفقات الأصلية محفوظة");
-    } catch (error: any) { toast.error(error.message); } finally { setBusy(false); if (fileRef.current) fileRef.current.value = ""; }
+    } catch (error: any) { toast.error(getUserErrorMessage(error)); } finally { setBusy(false); if (fileRef.current) fileRef.current.value = ""; }
   };
   if (isLoading) return <p className="text-xs">جاري تحميل سجل العملية…</p>;
-  if (error) return <p className="text-xs text-destructive">{error.message}</p>;
+  if (error) return <p className="text-xs text-destructive">{getUserErrorMessage(error)}</p>;
   return <section className="border rounded-lg p-3 space-y-3">
     <h4 className="text-sm font-bold">المرفقات اللاحقة وسجل التدقيق</h4>
     <p className="text-xs text-muted-foreground">المرفقات الأصلية ثابتة. الإضافة اللاحقة تحفظ اسم المستخدم ووقت الإضافة، ولا تغيّر العملية المنفذة.</p>

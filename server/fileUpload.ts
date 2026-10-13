@@ -7,6 +7,7 @@ import multer from "multer";
 import crypto from "crypto";
 import { storagePut } from "./storage";
 import { sdk } from "./_core/sdk";
+import { getUserErrorMessage } from "../shared/errorMessages";
 
 const router = Router();
 
@@ -85,7 +86,7 @@ router.post("/api/upload", async (req, res, next) => {
     });
   } catch (err: any) {
     console.error("خطأ في رفع الملف:", err);
-    return res.status(500).json({ error: err.message || "فشل رفع الملف" });
+    return res.status(500).json({ error: getUserErrorMessage(err, "تعذر رفع الملف الآن. أعد المحاولة لاحقًا.") });
   }
 });
 

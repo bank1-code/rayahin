@@ -1,3 +1,4 @@
+import { getUserErrorMessage } from "@shared/errorMessages";
 import FieldHelp from "@/components/FieldHelp";
 import { escapeHtml } from "@shared/html";
 import { remainingQuantity } from "@shared/inventoryQuantity";
@@ -246,7 +247,7 @@ export default function Transfers() {
       setShowNew(false);
       resetTransferForm();
     } catch (error: any) {
-      toast.error(error.message || "حدث خطأ أثناء النقل");
+      toast.error(getUserErrorMessage(error, "حدث خطأ أثناء النقل"));
     } finally {
       transferExecuting.current = false;
       setTransferConfirmation(false);

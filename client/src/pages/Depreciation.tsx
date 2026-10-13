@@ -1,3 +1,4 @@
+import { getUserErrorMessage } from "@shared/errorMessages";
 import FieldHelp from "@/components/FieldHelp";
 import { depreciationHelp } from "@/lib/fieldHelpText";
 import { useState, useEffect, type ReactNode } from "react";
@@ -214,7 +215,7 @@ export default function Depreciation() {
       refresh();
       toast.success("تم حفظ الإجراء");
     },
-    error = (e: any) => toast.error(e.message);
+    error = (e: any) => toast.error(getUserErrorMessage(e));
   const submit = trpc.depreciation.submitDocument.useMutation({
       onSuccess: ok,
       onError: error,
@@ -309,7 +310,7 @@ export default function Depreciation() {
           تاريخياً؛ تصديرها لا يثبت ترحيلها في برنامجك المحاسبي.
         </div>
         {workspace.error && (
-          <p className="text-destructive">{workspace.error.message}</p>
+          <p className="text-destructive">{getUserErrorMessage(workspace.error)}</p>
         )}
         {workspace.isLoading ? (
           <p>جارٍ تحميل الوحدة…</p>
@@ -420,7 +421,7 @@ function PolicyForm({ w, onSaved }: { w: any; onSaved: () => void }) {
       setVersion(id ? (version ?? 0) + 1 : 0);
       onSaved();
     },
-    onError: e => toast.error(e.message),
+    onError: e => toast.error(getUserErrorMessage(e)),
   });
   const set = (key: keyof PolicyPayload, value: any) =>
     setP(prev => ({ ...prev, [key]: value }));
@@ -675,7 +676,7 @@ function BatchForm({ w, onSaved }: { w: any; onSaved: () => void }) {
   const { user } = useAuth();
   const classify = trpc.depreciation.assignClassification.useMutation({
     onSuccess: onSaved,
-    onError: e => toast.error(e.message),
+    onError: e => toast.error(getUserErrorMessage(e)),
   });
   const [id, setId] = useState<number | undefined>(),
     [version, setVersion] = useState<number | undefined>(),
@@ -705,7 +706,7 @@ function BatchForm({ w, onSaved }: { w: any; onSaved: () => void }) {
         setVersion(id ? (version ?? 0) + 1 : 0);
         onSaved();
       },
-      onError: e => toast.error(e.message),
+      onError: e => toast.error(getUserErrorMessage(e)),
     }),
     set = (key: keyof BatchPayload, value: any) =>
       setP(prev => ({ ...prev, [key]: value }));
@@ -966,7 +967,7 @@ function MovementForm({ w, onSaved }: { w: any; onSaved: () => void }) {
       setVersion(id ? (version ?? 0) + 1 : 0);
       onSaved();
     },
-    onError: e => toast.error(e.message),
+    onError: e => toast.error(getUserErrorMessage(e)),
   });
   return (
     <Box title="المراجعة المالية للحركات التشغيلية وتغيير التقدير">
@@ -1400,7 +1401,7 @@ function Periods({ w, onSaved }: { w: any; onSaved: () => void }) {
       onSaved();
       setReview(null);
     },
-    error = (e: any) => toast.error(e.message);
+    error = (e: any) => toast.error(getUserErrorMessage(e));
   const preview = trpc.depreciation.previewPeriod.useMutation({
       onSuccess: r => setShown(r.snapshot),
       onError: error,
@@ -1517,7 +1518,7 @@ function Periods({ w, onSaved }: { w: any; onSaved: () => void }) {
                                 const detail = await utils.depreciation.periodDetails.fetch({ id: row.id });
                                 setMonth(row.month);
                                 setShown(decode(detail.snapshot));
-                              } catch (e: any) { toast.error(e.message); }
+                              } catch (e: any) { toast.error(getUserErrorMessage(e)); }
                               finally { setLoadingDetails(false); }
                             }}
                           >
@@ -1722,7 +1723,7 @@ function Journals({ w, onSaved }: { w: any; onSaved: () => void }) {
       Download(r.base64, r.filename);
       onSaved();
     },
-    onError: e => toast.error(e.message),
+    onError: e => toast.error(getUserErrorMessage(e)),
   });
   const rows = w.journals.filter(
     (j: any) => j.effectiveDate >= from && j.effectiveDate <= to
@@ -2127,12 +2128,12 @@ function FinancialReports() {
         <p role="status" className="text-sm text-muted-foreground">جارٍ إعداد التقرير للفترة المحددة…</p>
       )}
       {report.error && (
-        <p className="text-destructive">{report.error.message}</p>
+        <p className="text-destructive">{getUserErrorMessage(report.error)}</p>
       )}
       {p && (
         <Box title={p.title}>
           {comparison.error && (
-            <p className="text-destructive">{comparison.error.message}</p>
+            <p className="text-destructive">{getUserErrorMessage(comparison.error)}</p>
           )}
           {comparison.data && (
             <Box title={comparisonTitle}>

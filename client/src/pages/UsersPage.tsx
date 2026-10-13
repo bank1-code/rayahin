@@ -1,3 +1,4 @@
+import { getUserErrorMessage } from "@shared/errorMessages";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -19,15 +20,15 @@ export default function UsersPage() {
 
   const createMut = trpc.localAuth.createUser.useMutation({
     onSuccess: () => { utils.localAuth.listUsers.invalidate(); toast.success("تم إضافة المستخدم بنجاح"); },
-    onError: (e) => toast.error(e.message),
+    onError: (e) => toast.error(getUserErrorMessage(e)),
   });
   const updateMut = trpc.localAuth.updateUser.useMutation({
     onSuccess: () => { utils.localAuth.listUsers.invalidate(); toast.success("تم تعديل المستخدم بنجاح"); },
-    onError: (e) => toast.error(e.message),
+    onError: (e) => toast.error(getUserErrorMessage(e)),
   });
   const deleteMut = trpc.localAuth.deleteUser.useMutation({
     onSuccess: () => { utils.localAuth.listUsers.invalidate(); toast.success("تم حذف المستخدم بنجاح"); },
-    onError: (e) => toast.error(e.message),
+    onError: (e) => toast.error(getUserErrorMessage(e)),
   });
 
   const [showAdd, setShowAdd] = useState(false);

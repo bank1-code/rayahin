@@ -1,3 +1,4 @@
+import { getUserErrorMessage } from "@shared/errorMessages";
 import { useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { Button } from "./ui/button";
@@ -51,7 +52,7 @@ export default function InventoryDifferencePanel() {
       setSelected(null);
       toast.success("حُفظت المتابعة مع بقاء نتيجة الجرد الأصلية");
     },
-    onError: error => toast.error(error.message),
+    onError: error => toast.error(getUserErrorMessage(error)),
   });
   const rows = filterCountRows(result.data || [], filters);
   const pages = Math.max(1, Math.ceil(rows.length / 20)),
@@ -91,7 +92,7 @@ export default function InventoryDifferencePanel() {
           : await image.mutateAsync({ base64, category: "inventory" });
       setDocuments(old => [...old, { name: file.name, url: result.url }]);
     } catch (error: any) {
-      toast.error(error.message || "تعذر رفع المستند");
+      toast.error(getUserErrorMessage(error, "تعذر رفع المستند"));
     } finally {
       setUploading(false);
     }
@@ -151,7 +152,7 @@ export default function InventoryDifferencePanel() {
       />
       {result.isLoading && <p>جاري تحميل الفروق…</p>}
       {result.error && (
-        <p className="text-destructive">{result.error.message}</p>
+        <p className="text-destructive">{getUserErrorMessage(result.error)}</p>
       )}
       <div className="overflow-x-auto">
         <table className="w-full text-sm min-w-[900px]">
@@ -284,7 +285,7 @@ export default function InventoryDifferencePanel() {
                 </div>
               ))}
               {actions.error && (
-                <p className="text-destructive">{actions.error.message}</p>
+                <p className="text-destructive">{getUserErrorMessage(actions.error)}</p>
               )}
               <select
                 aria-label="إجراء معالجة الفرق"

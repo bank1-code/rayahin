@@ -1,3 +1,4 @@
+import { getUserErrorMessage } from "@shared/errorMessages";
 /*
  * Design: Calm Luxury - صفحة تسجيل الدخول
  * تسجيل دخول مستقل بكلمة مرور واسم مستخدم (بدون OAuth)
@@ -24,7 +25,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
       onLoginSuccess();
     },
     onError: (err) => {
-      toast.error(err.message || "اسم المستخدم أو كلمة المرور غير صحيحة");
+      toast.error(getUserErrorMessage(err, "تعذر تسجيل الدخول الآن. أعد المحاولة لاحقًا."));
     },
   });
 

@@ -1,3 +1,4 @@
+import { getUserErrorMessage } from "@shared/errorMessages";
 import { useState } from "react";
 import FieldHelp from "@/components/FieldHelp";
 import { trpc } from "@/lib/trpc";
@@ -16,7 +17,7 @@ export default function FinancialClassifications() {
       utils.depreciation.invalidate();
       toast.success("تم إنشاء التصنيف المالي");
     },
-    onError: e => toast.error(e.message),
+    onError: e => toast.error(getUserErrorMessage(e)),
   });
   return (
     <section className="space-y-4" dir="rtl">
@@ -62,7 +63,7 @@ export default function FinancialClassifications() {
         </form>
       </div>
       {classes.error && (
-        <p className="text-destructive">{classes.error.message}</p>
+        <p className="text-destructive">{getUserErrorMessage(classes.error)}</p>
       )}
       <div className="rounded-xl border overflow-hidden">
         <table className="w-full text-right text-sm">

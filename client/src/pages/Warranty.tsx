@@ -1,3 +1,4 @@
+import { getUserErrorMessage } from "@shared/errorMessages";
 import FieldHelp from "@/components/FieldHelp";
 import { warrantyHelp } from "@/lib/fieldHelpText";
 import RecordScopeFilters from "@/components/RecordScopeFilters";
@@ -151,16 +152,7 @@ export default function Warranty() {
         ? form.originalWarrantyEnd
         : form.replacementWarrantyEnd,
   });
-  const errorText = (error: any) => {
-    try {
-      const issues = JSON.parse(error.message);
-      return Array.isArray(issues)
-        ? issues.map(issue => issue.message).join(" · ")
-        : error.message;
-    } catch {
-      return error.message;
-    }
-  };
+  const errorText = getUserErrorMessage;
   const saveRequest = async (send: boolean) => {
     if (!source) {
       toast.error("اختر السجل أولًا");
@@ -576,7 +568,7 @@ export default function Warranty() {
           <p className="text-xs text-muted-foreground">
             {visibleRequests.length} طلب يطابق الفلاتر
           </p>
-          {listError && <p className="text-destructive">{listError.message}</p>}
+          {listError && <p className="text-destructive">{getUserErrorMessage(listError)}</p>}
           <div className="overflow-x-auto">
             <table className="w-full min-w-[700px] text-sm text-right">
               <thead>
@@ -635,7 +627,7 @@ export default function Warranty() {
               </Button>
             </div>
             {detailError && (
-              <p className="text-destructive">{detailError.message}</p>
+              <p className="text-destructive">{getUserErrorMessage(detailError)}</p>
             )}
             {details && (
               <>
