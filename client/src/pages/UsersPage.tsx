@@ -47,6 +47,9 @@ export default function UsersPage() {
   const roleOptions: Role[] = currentUser?.role === "owner"
     ? [...ROLES]
     : ROLES.filter(role => role !== "owner");
+  const visibleUsers = currentUser?.role === "owner"
+    ? users
+    : users.filter(user => user.role !== "owner");
 
   const handleAdd = () => {
     if (!newName.trim()) return toast.error("يرجى إدخال الاسم");
@@ -86,7 +89,7 @@ export default function UsersPage() {
     }>
       {isLoading ? <div className="flex justify-center py-20"><Loader2 className="w-6 h-6 animate-spin" /></div> : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {users.map((u) => (
+          {visibleUsers.map((u) => (
             <div key={u.id} className="bg-card rounded-xl border border-border p-5">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3"><div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center"><User className="w-5 h-5 text-primary" /></div><div><h3 className="text-sm font-bold">{u.name || "بدون اسم"}</h3><p className="text-[11px] text-muted-foreground font-mono">@{u.username}</p></div></div>

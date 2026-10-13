@@ -53,14 +53,16 @@ export const localAuthRouter = router({
       return { success: true, user: { id: user.id, name: user.name, username: user.username, role: user.role, employeeId: user.employeeId } };
     }),
 
-  listUsers: adminProcedure.query(async () => {
+  listUsers: adminProcedure.query(async ({ ctx }) => {
     const db = await getDb();
     if (!db) throw new Error("قاعدة البيانات غير متوفرة");
+    const conditions = [eq(users.loginMethod, "local")];
+    if (ctx.user.role !== "owner") conditions.push(ne(users.role, "owner"));
     return db.select({
       id: users.id, username: users.username, name: users.name, role: users.role,
       employeeId: users.employeeId, employeeName: employees.fullName,
       lastSignedIn: users.lastSignedIn, createdAt: users.createdAt,
-    }).from(users).leftJoin(employees, eq(users.employeeId, employees.id)).where(eq(users.loginMethod, "local"));
+    }).from(users).leftJoin(employees, eq(users.employeeId, employees.id)).where(and(...conditions));
   }),
 
   createUser: adminProcedure
