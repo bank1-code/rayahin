@@ -1,0 +1,146 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1770983089046,
+      "tag": "0000_boring_namor",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1770983245399,
+      "tag": "0001_zippy_leopardon",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1770988015288,
+      "tag": "0002_sparkling_whistler",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1775994020080,
+      "tag": "0003_sloppy_whistler",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1776581778729,
+      "tag": "0004_magenta_stephen_strange",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1790363324315,
+      "tag": "0005_system_branding",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1790421737175,
+      "tag": "0006_role_hierarchy",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1790775607864,
+      "tag": "0007_location_branch_department",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1791191134332,
+      "tag": "0008_hierarchical_numbering",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1791197837907,
+      "tag": "0009_monthly_asset_custody_numbering",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1791203246287,
+      "tag": "0010_melted_legion",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "5",
+      "when": 1791208883354,
+      "tag": "0011_curved_scrambler",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "5",
+      "when": 1791270356632,
+      "tag": "0012_equal_ma_gnuci",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "5",
+      "when": 1791270949036,
+      "tag": "0013_inventory_session_mapping",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "5",
+      "when": 1791272224525,
+      "tag": "0014_warranty_replacements",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "5",
+      "when": 1791273388368,
+      "tag": "0015_accounting_manager_role",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "5",
+      "when": 1791276528868,
+      "tag": "0016_inventory_count_approval",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "5",
+      "when": 1791276775382,
+      "tag": "0017_inventory_difference_followup",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "5",
+      "when": 1791278421390,
+      "tag": "0018_inventory_count_usability",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "5",
+      "when": 1791288843443,
+      "tag": "0019_dark_stingray",
+      "breakpoints": true
+    }
+  ]
+}
