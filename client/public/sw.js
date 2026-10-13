@@ -1,9 +1,9 @@
 /**
- * Tolan PWA Service Worker
+ * رياحين دمشق PWA Service Worker
  * يوفر: تخزين مؤقت ذكي، دعم offline، تحديث تلقائي
  */
 
-const CACHE_NAME = 'tolan-v1';
+const CACHE_NAME = 'rayahin-v1';
 const OFFLINE_URL = '/offline.html';
 
 // الملفات الأساسية للتخزين المؤقت
@@ -95,7 +95,7 @@ self.addEventListener('fetch', (event) => {
 self.addEventListener('push', (event) => {
   if (!event.data) return;
   const data = event.data.json();
-  self.registration.showNotification(data.title || 'Tolan', {
+  self.registration.showNotification(data.title || 'رياحين دمشق', {
     body: data.body || '',
     icon: '/icon-192.svg',
     badge: '/icon-192.svg',

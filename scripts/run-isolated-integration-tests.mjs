@@ -11,8 +11,8 @@ const run=path.join(root,`isolated-13-${stamp}`);mkdirSync(run,{recursive:true})
 const fieldHelp=process.argv.includes('--field-help');
 const sourceUrl=process.env.DATABASE_URL;if(!sourceUrl)throw Error('DATABASE_URL required');
 const original=new URL(sourceUrl),sourceName=decodeURIComponent(original.pathname.slice(1));
-const schemaName=`tolan_qa13_${Date.now()}_${randomBytes(4).toString('hex')}`;
-const ownedName=name=>/^tolan_qa13_\d+_[a-f0-9]{8}$/.test(name)&&name===schemaName&&name!==sourceName;
+const schemaName=`rayahin_qa13_${Date.now()}_${randomBytes(4).toString('hex')}`;
+const ownedName=name=>/^rayahin_qa13_\d+_[a-f0-9]{8}$/.test(name)&&name===schemaName&&name!==sourceName;
 const id=name=>{if(!/^[A-Za-z0-9_]+$/.test(name))throw Error('Unsafe SQL identifier');return '`'+name+'`';};
 const ssl={minVersion:'TLSv1.2',rejectUnauthorized:true};
 const target=new URL(sourceUrl);target.pathname='/'+schemaName;

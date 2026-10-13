@@ -367,7 +367,7 @@ export function generateClearanceReport(data: ClearanceReportData): string {
             font-style: italic;
         }
 
-        /* ===== ملاحظات الرئيس التنفيذي ===== */
+        /* ===== ملاحظات المدير العام ===== */
         .ceo-section {
             margin-top: 20px;
             padding-top: 16px;
@@ -410,7 +410,7 @@ export function generateClearanceReport(data: ClearanceReportData): string {
         .executive-signatures td {
             text-align: center;
             padding: 10px;
-            width: 50%;
+            width: 100%;
             vertical-align: top;
         }
 
@@ -732,7 +732,7 @@ export function generateClearanceReport(data: ClearanceReportData): string {
             </div>
 
             <div class="ceo-section">
-                <div class="ceo-notes-title">ملاحظات الرئيس التنفيذي:</div>
+                <div class="ceo-notes-title">ملاحظات المدير العام:</div>
                 <div class="ceo-notes-lines">
                     <div class="note-line"><span class="num">1</span></div>
                     <div class="note-line"><span class="num">2</span></div>
@@ -741,18 +741,13 @@ export function generateClearanceReport(data: ClearanceReportData): string {
                 <table class="executive-signatures">
                     <tr>
                         <td>
-                            <div class="exec-title">مدير المشاريع</div>
-                            <div class="exec-name">م/ سعد الزكري</div>
-                        </td>
-                        <td>
-                            <div class="exec-title">الرئيس التنفيذي</div>
-                            <div class="exec-name">م. زكري بن عبدالله الزكري</div>
+                            <div class="exec-title">المدير العام</div>
                         </td>
                     </tr>
                 </table>
 
                 <div class="final-note">
-                    <p><strong>ملحوظة:</strong> أي شرح أو تعليق خارج حقول النموذج لا يعتمد إلا بتوقيع الرئيس التنفيذي.</p>
+                    <p><strong>ملحوظة:</strong> أي شرح أو تعليق خارج حقول النموذج لا يعتمد إلا بتوقيع المدير العام.</p>
                 </div>
             </div>
         </div>

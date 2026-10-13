@@ -10,5 +10,5 @@
   <rect x="100" y="140" width="16" height="22" rx="2" fill="#0f766e"/>
   <polygon points="20,84 96,30 172,84" fill="white" opacity="0.9"/>
   <circle cx="148" cy="52" r="18" fill="#f59e0b"/>
-  <text x="148" y="58" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold" fill="white">T</text>
+  <text x="148" y="58" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold" fill="white">ر</text>
 </svg>

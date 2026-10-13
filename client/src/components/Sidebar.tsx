@@ -140,7 +140,7 @@ export default function Sidebar({ collapsed, onToggle, onClose }: SidebarProps) 
           <>
             <div className="overflow-hidden flex-1">
               <h1 className="text-sm font-bold text-sidebar-foreground truncate">
-                {branding?.systemName || "إدارة العهد والأصول"}
+                {branding?.systemName || "رياحين دمشق"}
               </h1>
               <p className="text-[10px] text-muted-foreground truncate">{branding?.systemSubtitle || "نظام سحابي متكامل"}</p>
             </div>

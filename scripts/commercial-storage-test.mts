@@ -7,7 +7,7 @@ import {storagePut,storageGet} from '../server/storage';
 const required=['IDRIVE_E2_ENDPOINT','IDRIVE_E2_BUCKET','IDRIVE_E2_ACCESS_KEY_ID','IDRIVE_E2_SECRET_ACCESS_KEY'];
 if(!required.every(name=>Boolean(process.env[name])))throw Error('IDrive configuration required; no provider fallback certification');
 const client=new S3Client({endpoint:process.env.IDRIVE_E2_ENDPOINT,region:process.env.IDRIVE_E2_REGION||'us-east-1',forcePathStyle:true,credentials:{accessKeyId:process.env.IDRIVE_E2_ACCESS_KEY_ID!,secretAccessKey:process.env.IDRIVE_E2_SECRET_ACCESS_KEY!}});
-const key=`documents/archive/qa-security-${randomUUID()}.pdf`,data=Buffer.from('%PDF-1.4\n% Tolan private-storage disposable test\n%%EOF');
+const key=`documents/archive/qa-security-${randomUUID()}.pdf`,data=Buffer.from('%PDF-1.4\n% رياحين دمشق private-storage disposable test\n%%EOF');
 let uploaded=false;
 try {
  const stored=await storagePut(key,data,'application/pdf');uploaded=true;

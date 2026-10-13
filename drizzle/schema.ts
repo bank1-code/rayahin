@@ -611,7 +611,7 @@ export type InsertInventorySession = typeof inventorySessions.$inferInsert;
 // =============================================
 export const appSettings = mysqlTable("app_settings", {
   id: int("id").primaryKey(),
-  systemName: varchar("systemName", { length: 150 }).default("إدارة العهد والأصول").notNull(),
+  systemName: varchar("systemName", { length: 150 }).default("رياحين دمشق").notNull(),
   systemSubtitle: varchar("systemSubtitle", { length: 200 }).default("نظام سحابي متكامل").notNull(),
   logoUrl: text("logoUrl"),
   locationSequence: int("locationSequence").default(0).notNull(),

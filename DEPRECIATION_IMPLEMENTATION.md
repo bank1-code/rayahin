@@ -32,7 +32,7 @@
 ## أوامر PowerShell
 
 ```powershell
-Set-Location C:\Users\mh\Desktop\tolanasset\tolan
+Set-Location C:\Users\mh\Desktop\rayahinasset\rayahin
 pnpm check
 pnpm test:depreciation
 pnpm test:phase-one

@@ -12,7 +12,7 @@ export const baselinePackage='release/pilot-2026-10-07T12-31-52-093Z';
 /** Migration and code rollback use only the disposable schema made by the parent harness. */
 export async function runUpgrade(db:mysql.Pool){
  const [identity]:any=await db.query('SELECT DATABASE() name');
- assert.match(identity[0].name,/^tolan_repair_\d+_[a-f0-9]{8}$/);
+ assert.match(identity[0].name,/^rayahin_repair_\d+_[a-f0-9]{8}$/);
  const manifest=JSON.parse(readFileSync('qa-results/pilot-package.json','utf8'));
  const password=randomBytes(20).toString('hex');
  let secret=randomBytes(40).toString('hex');

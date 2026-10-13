@@ -4,7 +4,7 @@ import { writeFileSync } from 'node:fs';
 import bcrypt from 'bcryptjs';
 export async function runSecurityDatabase(database:mysql.Pool) {
  const dbname=new URL(process.env.DATABASE_URL!).pathname.slice(1);
- if(!/^tolan_repair_\d+_[a-f0-9]{8}$/.test(dbname))throw Error('Disposable security schema required');
+ if(!/^rayahin_repair_\d+_[a-f0-9]{8}$/.test(dbname))throw Error('Disposable security schema required');
  const {sdk}=await import('../server/_core/sdk');const {appRouter}=await import('../server/routers');
  const {mayDownloadRecordFile}=await import('../server/fileRecordAccess');const {getDb}=await import('../server/db');
  const checks:{name:string,status:string}[]=[];

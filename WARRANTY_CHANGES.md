@@ -1,6 +1,6 @@
 # المرحلة الوسيطة — استبدال الضمان
 
-طُبقت التغييرات داخل `C:\Users\mh\Desktop\tolanasset\tolan`، وأضيفت «استبدال الضمان» في قائمة العمليات، بمسار `/warranty`. هذه مرحلة بين الأولى والثانية، وفق القواعد التي وافق عليها المستخدم.
+طُبقت التغييرات داخل `C:\Users\mh\Desktop\rayahinasset\rayahin`، وأضيفت «استبدال الضمان» في قائمة العمليات، بمسار `/warranty`. هذه مرحلة بين الأولى والثانية، وفق القواعد التي وافق عليها المستخدم.
 
 ## سير الاستخدام
 
@@ -50,7 +50,7 @@
 ## أوامر PowerShell
 
 ```powershell
-Set-Location 'C:\Users\mh\Desktop\tolanasset\tolan'
+Set-Location 'C:\Users\mh\Desktop\rayahinasset\rayahin'
 npm run test:warranty
 npm run test:phase-one
 npx tsc --noEmit --target es2020 --incremental false

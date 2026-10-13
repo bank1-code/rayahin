@@ -11,7 +11,7 @@ import {financialState} from "../server/depreciationStore";
 const seed=JSON.parse(readFileSync("qa-results/run.json","utf8"));
 const previous=JSON.parse(readFileSync("qa-results/financial.json","utf8"));writeFileSync("qa-results/financial-infrastructure-attempt.json",JSON.stringify(previous,null,2));
 const name=previous.schema,original=process.env.DATABASE_URL!;
-if(!/^tolan_qa_\d+_[a-f0-9]{8}$/.test(name)||new URL(original).pathname===`/${name}`)throw new Error("Unsafe isolated target");
+if(!/^rayahin_qa_\d+_[a-f0-9]{8}$/.test(name)||new URL(original).pathname===`/${name}`)throw new Error("Unsafe isolated target");
 const target=new URL(original);target.pathname=`/${name}`;
 const options={ssl:{minVersion:"TLSv1.2",rejectUnauthorized:true},connectionLimit:2,maxIdle:1,idleTimeout:30000,enableKeepAlive:true};
 const admin= mysql.createPool({uri:original,...options}),isolated=mysql.createPool({uri:target.toString(),...options});

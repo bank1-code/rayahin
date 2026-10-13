@@ -498,7 +498,7 @@ async function ensureBrandingTable(db: any) {
   await db.execute(sql`
     CREATE TABLE IF NOT EXISTS app_settings (
       id int NOT NULL,
-      systemName varchar(150) NOT NULL DEFAULT 'إدارة العهد والأصول',
+      systemName varchar(150) NOT NULL DEFAULT 'رياحين دمشق',
       systemSubtitle varchar(200) NOT NULL DEFAULT 'نظام سحابي متكامل',
       logoUrl text,
       locationSequence int NOT NULL DEFAULT 0,
@@ -519,7 +519,7 @@ const brandingRouter = router({
     const [row] = await db.select().from(appSettings).where(eq(appSettings.id, 1)).limit(1);
     return row ?? {
       id: 1,
-      systemName: "إدارة العهد والأصول",
+      systemName: "رياحين دمشق",
       systemSubtitle: "نظام سحابي متكامل",
       logoUrl: null,
       updatedBy: null,

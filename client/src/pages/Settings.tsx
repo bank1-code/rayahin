@@ -441,7 +441,7 @@ function BrandingTab() {
         </div>
         <div className="space-y-1.5">
           <label className="text-xs font-bold">اسم النظام</label>
-          <FieldHelp text={"الاسم الذي سيظهر للمستخدمين بوصفه اسم النظام أو المؤسسة."}><input value={systemName} maxLength={150} onChange={(e) => setSystemName(e.target.value)} className="w-full h-10 px-3 rounded-lg bg-muted/30 border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="إدارة العهد والأصول" /></FieldHelp>
+          <FieldHelp text={"الاسم الذي سيظهر للمستخدمين بوصفه اسم النظام أو المؤسسة."}><input value={systemName} maxLength={150} onChange={(e) => setSystemName(e.target.value)} className="w-full h-10 px-3 rounded-lg bg-muted/30 border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="رياحين دمشق" /></FieldHelp>
         </div>
         <div className="space-y-1.5">
           <label className="text-xs font-bold">الوصف المختصر</label>

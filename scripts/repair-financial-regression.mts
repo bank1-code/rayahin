@@ -10,8 +10,8 @@ import {financialState} from "../server/depreciationStore";
 
 const seed=JSON.parse(readFileSync("qa-results/run.json","utf8"));
 if(!seed.finishedAt)throw new Error("Wait for main additive QA run to finish before copying the dataset");
-const original=process.env.DATABASE_URL!,name=`tolan_qa_${Date.now()}_${randomBytes(4).toString("hex")}`;
-if(!/^tolan_qa_\d+_[a-f0-9]{8}$/.test(name))throw new Error("Invalid isolation schema");
+const original=process.env.DATABASE_URL!,name=`rayahin_qa_${Date.now()}_${randomBytes(4).toString("hex")}`;
+if(!/^rayahin_qa_\d+_[a-f0-9]{8}$/.test(name))throw new Error("Invalid isolation schema");
 const admin=await mysql.createPool({uri:original,ssl:{minVersion:"TLSv1.2",rejectUnauthorized:true},connectionLimit:2,maxIdle:1,idleTimeout:30000,enableKeepAlive:true});
 let isolated:any,created=false;
 const result:any={marker:seed.marker,startedAt:new Date().toISOString(),environment:"قاعدة اختبار مستقلة ببنية المشروع وعلاقات قاعدة البيانات ونسخة بيانات QA والهيكل الحالي",checks:[],monthly:[],limitations:["واجهة تسجيل الدخول لم تختبر؛ تستدعي الحالات منطق الخادم عبر tRPC باستخدام سياق مستخدم معروف.","تواريخ النقل في القاعدة المستقلة فقط ضُبطت إلى 15 فبراير لاختبار توزيع مصروف شهر مكتمل؛ تاريخ حركة النقل في البرنامج الأصلي بقي كما هو."]};

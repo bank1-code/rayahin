@@ -20,7 +20,7 @@ export function registerOAuthRoutes(app: Express) {
     throw new Error("Configure HTTPS OAUTH_PORTAL_URL and OAUTH_REDIRECT_URI");
   if (!process.env.OAUTH_SERVER_URL || !process.env.VITE_APP_ID) throw new Error("OAuth configuration incomplete");
   const pending = new Map<string, {expiry:number;ip:string}>();
-  const stateCookie = "tolan_oauth_state";
+  const stateCookie = "rayahin_oauth_state";
   app.get("/api/oauth/start", (req, res) => {
     for (const [nonce, transaction] of pending) if (transaction.expiry <= Date.now()) pending.delete(nonce);
     const previous = parseCookie(req.headers.cookie || "")[stateCookie];

@@ -1,6 +1,6 @@
 # استكمال المرحلة الأولى — الاستبعاد والتاريخ والأرشيف
 
-طُبقت التغييرات داخل `C:\Users\mh\Desktop\tolanasset\tolan` على الصفحات والمسارات الحالية. أُكملت الخطوتان الثالثة والرابعة فوق تأمين النقل والمسودة والاعتماد المنفذين سابقًا. لا توجد إضافة للإهلاك أو القيود المحاسبية أو استبدال الضمان في هذا التنفيذ.
+طُبقت التغييرات داخل `C:\Users\mh\Desktop\rayahinasset\rayahin` على الصفحات والمسارات الحالية. أُكملت الخطوتان الثالثة والرابعة فوق تأمين النقل والمسودة والاعتماد المنفذين سابقًا. لا توجد إضافة للإهلاك أو القيود المحاسبية أو استبدال الضمان في هذا التنفيذ.
 
 ## الاستبعاد
 
@@ -39,7 +39,7 @@
 ## أوامر PowerShell
 
 ```powershell
-Set-Location 'C:\Users\mh\Desktop\tolanasset\tolan'
+Set-Location 'C:\Users\mh\Desktop\rayahinasset\rayahin'
 npm run test:phase-one
 npx tsc --noEmit --target es2020 --incremental false
 npm run build

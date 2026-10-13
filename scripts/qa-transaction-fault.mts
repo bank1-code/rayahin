@@ -5,7 +5,7 @@ import mysql from "mysql2/promise";
 import {appRouter} from "../server/routers";
 import {getDb} from "../server/db";
 const run=JSON.parse(readFileSync("qa-results/run.json","utf8")),financial=JSON.parse(readFileSync("qa-results/financial.json","utf8")),discovery=JSON.parse(readFileSync("qa-results/discovery.json","utf8"));
-if(!/^tolan_qa_\d+_[a-f0-9]{8}$/.test(financial.schema)||financial.isolatedDatabaseRemoved)throw new Error("Active isolated QA schema required");
+if(!/^rayahin_qa_\d+_[a-f0-9]{8}$/.test(financial.schema)||financial.isolatedDatabaseRemoved)throw new Error("Active isolated QA schema required");
 const target=new URL(process.env.DATABASE_URL!);assert.notEqual(target.pathname,`/${financial.schema}`);target.pathname=`/${financial.schema}`;process.env.DATABASE_URL=target.toString();
 const sql=mysql.createPool({uri:target.toString(),ssl:{minVersion:"TLSv1.2",rejectUnauthorized:true},connectionLimit:2,maxIdle:1,idleTimeout:30000});
 const ctx=(user:any)=>({user,req:{ip:"127.0.0.1",headers:{}},res:{}}as any),makerUser=discovery.users.find((u:any)=>u.id===run.actors.maker.id),maker=appRouter.createCaller(ctx(makerUser)),out:any={checks:[],environment:"قاعدة QA المستقلة فقط"};

@@ -12,7 +12,7 @@ import type mysql from 'mysql2/promise';
 // Called only by the disposable-schema harness. No production data is copied.
 export async function runAcceptance(db:mysql.Pool){
  const [identity]:any=await db.query('SELECT DATABASE() AS name');
- if(!/^tolan_repair_\d+_[a-f0-9]{8}$/.test(identity[0].name))throw new Error('Isolated schema required');
+ if(!/^rayahin_repair_\d+_[a-f0-9]{8}$/.test(identity[0].name))throw new Error('Isolated schema required');
  const {appRouter}=await import('../server/routers');
  const {createContext}=await import('../server/_core/context');
  const {applySecurityMiddleware,requestValidator}=await import('../server/security');

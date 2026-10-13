@@ -33,7 +33,7 @@
 نجح 136 اختبارًا محليًا، منها 8 لاختبار حدود الدور وتعيينه ومسار المحاسب ثم مدير الحسابات، مع منع اعتماد المحاسب عبر API ومنع مدير الحسابات من إدارة المستخدمين أو الوصول إلى النسخ الاحتياطية. هذه اختبارات API بمحاكاة قاعدة البيانات؛ لا تتضمن تسجيل دخول وتجربة تفاعلية في المتصفح.
 
 ```powershell
-Set-Location 'C:\Users\mh\Desktop\tolanasset\tolan'
+Set-Location 'C:\Users\mh\Desktop\rayahinasset\rayahin'
 npm run test:phase-one
 npx tsc --noEmit --target es2020 --incremental false
 npm run build

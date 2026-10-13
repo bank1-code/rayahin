@@ -4,8 +4,8 @@ import {randomBytes} from 'node:crypto';
 import {spawn} from 'node:child_process';
 import {writeFileSync,readFileSync} from 'node:fs';
 const original=process.env.DATABASE_URL!;
-const name=`tolan_repair_${Date.now()}_${randomBytes(4).toString('hex')}`;
-if(!/^tolan_repair_\d+_[a-f0-9]{8}$/.test(name))throw new Error('Unsafe schema');
+const name=`rayahin_repair_${Date.now()}_${randomBytes(4).toString('hex')}`;
+if(!/^rayahin_repair_\d+_[a-f0-9]{8}$/.test(name))throw new Error('Unsafe schema');
 const admin=await mysql.createPool({uri:original,ssl:{minVersion:'TLSv1.2',rejectUnauthorized:true},connectionLimit:2});let created=false,isolated:mysql.Pool|undefined;
 try{
  await admin.query(`CREATE DATABASE \`${name}\``);created=true;

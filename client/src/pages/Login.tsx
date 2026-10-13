@@ -52,7 +52,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
               <Building2 className="w-6 h-6 text-primary-foreground" />
             </div>
             <div>
-              <h1 className="text-lg font-extrabold text-foreground">إدارة العهد والأصول</h1>
+              <h1 className="text-lg font-extrabold text-foreground">رياحين دمشق</h1>
               <p className="text-[11px] text-muted-foreground">نظام سحابي متكامل</p>
             </div>
           </div>
@@ -126,7 +126,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
           </form>
 
           <p className="text-[10px] text-muted-foreground/60 text-center mt-8">
-            نظام إدارة العهد والأصول - الإصدار 2.0
+            نظام رياحين دمشق - الإصدار 2.0
           </p>
         </div>
       </div>

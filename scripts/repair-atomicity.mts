@@ -12,8 +12,8 @@ import {getDb} from "../server/db";
 // Provision a fresh schema, copy structure only, and remove only the schema created here.
 // Never run tests against DATABASE_URL's original database and never copy its records.
 const original=process.env.DATABASE_URL;if(!original)throw new Error("DATABASE_URL required");
-const schemaName=`tolan_dep_test_${Date.now()}_${randomBytes(4).toString("hex")}`;
-if(!/^tolan_dep_test_\d+_[a-f0-9]{8}$/.test(schemaName))throw new Error("Unsafe test schema name");
+const schemaName=`rayahin_dep_test_${Date.now()}_${randomBytes(4).toString("hex")}`;
+if(!/^rayahin_dep_test_\d+_[a-f0-9]{8}$/.test(schemaName))throw new Error("Unsafe test schema name");
 const admin=await mysql.createPool({uri:original,ssl:{minVersion:"TLSv1.2",rejectUnauthorized:true},connectionLimit:2,maxIdle:1,idleTimeout:30000});
 let created=false;
 try {

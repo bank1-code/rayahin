@@ -9,7 +9,7 @@ cases=json.loads((root/'qa-results/ui-full-cycle/lifecycle-cases.json').read_tex
 output=root/'output/pdf/qa-warranty-claims.pdf'
 output.parent.mkdir(parents=True,exist_ok=True)
 styles=getSampleStyleSheet()
-story=[Paragraph('TOLAN - WARRANTY TEST CLAIMS',styles['Title']),Paragraph('FICTITIOUS QA DOCUMENT - not a commercial invoice or a real warranty authorization.',styles['Normal']),Spacer(1,18)]
+story=[Paragraph('RAYAHIN DAMASCUS - WARRANTY TEST CLAIMS',styles['Title']),Paragraph('FICTITIOUS QA DOCUMENT - not a commercial invoice or a real warranty authorization.',styles['Normal']),Spacer(1,18)]
 for case in [c for c in cases if c['case'].startswith('WARRANTY')]:
     story.append(Paragraph(case['case'].replace('_',' '),styles['Heading2']))
     fields=[('Test reference',case['case']),('Source record',case['operational']['code']),('Record type',case['fixture']['entityType']),('Quantity',str(case['quantity'])),('Unit reference cost (SAR)',case['fixture']['unitCost']),('Original purchase',case['fixture']['purchaseDate']),('Fault date',case['incidentDate']),('Replacement received',case['effectiveDate']),('Policy',case['policy']),('Original identifiers','; '.join(case['originalUnits'])),('Replacement identifiers','; '.join(case['replacementUnits']))]

@@ -37,7 +37,7 @@
 الأوامر:
 
 ```powershell
-Set-Location C:\Users\mh\Desktop\tolanasset\tolan
+Set-Location C:\Users\mh\Desktop\rayahinasset\rayahin
 node scripts/test-phase-one.mjs
 npx tsc --noEmit --target es2020 --incremental false
 npx vite build --configLoader runner
